@@ -2,11 +2,12 @@
 from flask import Flask, request, jsonify
 
 from db import *
-from order import Orders
+# from order import Orders, order_schema, Orders_schema
 from users import Users
-from categories import Categories
-from products import Products
-from order_products_association import order_products_association
+# , users_schema, user_schema
+# from categories import Categories
+# from products import Products
+# from order_products_association import OrderProductsAssociation
 
 app = Flask(__name__)
 #DATABASE RELATIONSHIPS
@@ -28,50 +29,54 @@ def populate_object(obj, data_dictionary):
     if getattr(obj, field): 
       setattr(obj, field, data_dictionary[field])
 
-# @app.route('/user/add', methods=['POST'] )
-# def user_add():
-#   post_data = request.json
-#   if not post_data:
-#     post_data = request.form
+@app.route('/user/add', methods=['POST'] )
+def user_add():
+  post_data = request.json
+  if not post_data:
+    post_data = request.form
 
 
-#   first_name = post_data.get('first_name')
-#   last_name = post_data.get('last_name')
-#   email = post_data.get('email')
-#   phone = post_data.get('phone')
-#   city = post_data.get('city')
-#   state = post_data.get('state')
-#   org_id = post_data.get('org_id')
-#   active = post_data.get('active')
+  first_name = post_data.get('first_name')
+  last_name = post_data.get('last_name')
+  email = post_data.get('email')
+  street_address = post_data.get('street_address')
+  phone = post_data.get('phone')
+  city = post_data.get('city')
+  state = post_data.get('state')
+  postal_code = post_data.get('postal_code')
 
-#   add_user(first_name, last_name, email, phone, city, state, org_id, active)
+  # active = post_data.get('active')
+  # orders = post_data.get('orders')
 
-#   return jsonify("User created"), 201
+  add_user( first_name, last_name, email, street_address, phone, city, state, postal_code)
+   
 
-# def add_user(first_name, last_name, email, phone, city, state, org_id, active): 
-#   new_user = Users(first_name, last_name, email, phone, city, state, org_id, active)
+  return jsonify("User created"), 201
+
+def add_user( first_name, last_name, email, street_address, phone, city, state, postal_code): 
+  new_user = Users( first_name, last_name, email, street_address, phone, city, state, postal_code)
   
-#   db.session.add(new_user)
-#   db.session.commit()
+  db.session.add(new_user)
+  db.session.commit()
 
-# @app.route('/org/add', methods=['POST'] )
-# def org_add():
+# @app.route('/order/add', methods=['POST'] )
+# def order_add():
 #   post_data = request.json
 #   if not post_data:
 #     post_data = request.form
-#   name = post_data.get('name')
-#   phone = post_data.get('phone')
-#   city = post_data.get('city')
-#   state = post_data.get('state')
-#   active = post_data.get('active')
+#   order_id = post_data.get('order_id')
+#   user_id = post_data.get('user_id')
+#   order_date = post_data.get('order_date')
+#   ship_date = post_data.get('ship_date')
+#   order_total_price = post_data.get('order_total_price')
+#   order_completed = post_data.get('order_completed')
+#   add_order(order_id, user_id, order_date, ship_date, order_total_price, order_completed)
 
-#   add_org(name, phone, city, state, active)
+#   return jsonify("Created Order"), 201
 
-#   return jsonify("Org created"), 201
-
-# def add_org(name, phone, city, state, active):
-#   new_org = Organizations(name, phone, city, state, active)
-#   db.session.add(new_org)
+# def add_order(order_id, user_id, order_date, ship_date, order_total_price, order_completed):
+#   new_order = Orders(order_id, user_id, order_date, ship_date, order_total_price, order_completed)
+#   db.session.add(new_order)
 #   db.session.commit()
 
 # @app.route('/users/get', methods=['GET'] )
@@ -157,7 +162,7 @@ def populate_object(obj, data_dictionary):
 #   db.session.commit()
 #   return jsonify('Organization Activated'), 200
 
-# @app.route('/user/activate/<user_id>', methods=['GET'] )
+# @app.route('/user/activate/<user_id>', methods=['POST'] )
 # def user_activate(user_id):
 #   results = db.session.query(Users).filter(Users.user_id == user_id).first()
 #   results.active=True
@@ -171,7 +176,7 @@ def populate_object(obj, data_dictionary):
 #   db.session.commit()
 #   return jsonify('Organization Deactivated'), 200
 
-# @app.route('/user/activate/<user_id>', methods=['GET'] )
+# @app.route('/user/deactivate/<user_id>', methods=['POST'] )
 # def user_deactivate(user_id):
 #   results = db.session.query(Users).filter(Users.user_id == user_id).first()
 #   results.active=False

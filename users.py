@@ -17,9 +17,9 @@ class Users(db.Model):
     state = db.Column(db.String())
     postal_code = db.Column(db.String())
     active = db.Column(db.Boolean(), default=True)
-    orders = db.relationship('Orders', back_populates = 'users')
+    # orders = db.relationship('Orders', back_populates = 'users')
 
-    def __init__(self, first_name, last_name, email, street_address, phone, city, state, active):
+    def __init__(self, first_name, last_name, email, street_address, phone, city, state, postal_code):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
@@ -27,14 +27,15 @@ class Users(db.Model):
         self.street_address = street_address
         self.city = city
         self.state = state
-        self.active = active
+        self.postal_code = postal_code
+        # self.active = active
 
 # I don't understand the back_populates or the relationships
+# Is the orders field in the top need to be called in the __init__???
+class UsersSchema(ma.Schema):
+    class Meta:
+        fields = ['user_id', 'first_name', 'last_name', 'email', 'street_address','phone', 'city','state', 'postal_code', 'active']
 
-# class UsersSchema(ma.Schema):
-#     class Meta:
-#         fields = ['user_id', 'first_name', 'last_name', 'email','phone', 'street_address', 'city', 'state', 'postal_code', 'active']
-
-#     orders = ma.fields.Nested(OrdersSchema())
-# user_schema = UsersSchema()
-# users_schema = UsersSchema( many=True )
+    # orders = ma.fields.Nested(OrdersSchema())
+user_schema = UsersSchema()
+users_schema = UsersSchema( many=True )

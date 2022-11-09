@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from db import db
 import marshmallow as ma
 
+from order_products_association import OrderProductsAssociationSchema
 
 class Products(db.Model):
     __tablename__='products'
@@ -12,7 +13,8 @@ class Products(db.Model):
     product_total_price = db.Column(db.String(), nullable= False)
     category_id = db.Column(UUID(as_uuid=True),db.ForeignKey('categories.category_id'), nullable=False)
     active = db.Column(db.Boolean(), default=True)
-    orders = db.relationship('OrderProductsAssociation',back_populates = 'product_id')
+    orders = db.relationship('association',back_populates = 'product_id')
+
     def __init__(self, product_id, product_name, product_description, product_total_price, category_id, active):
         self.product_id = product_id
         self.product_name = product_name
@@ -22,12 +24,12 @@ class Products(db.Model):
         self.active = active
 
 
-# class ProductsSchema(ma.Schema):
-#     class Meta:
-#         fields = ['product_id', 'product_name', 'product_description', 'product_total_price','category_id', 'active']
+class ProductsSchema(ma.Schema):
+    class Meta:
+        fields = ['product_id', 'product_name', 'product_description', 'product_total_price','category_id', 'active']
 
-
-# product_schema = ProductSchema()
-# products_schema = ProductSchema( many=True )
+#OrderProductsAssociationSchema
+product_schema = ProductsSchema()
+products_schema = ProductsSchema( many=True )
 
 # I don't understand the back_populates or the relationships

@@ -1,0 +1,11 @@
+Need to evaluate what fields I want to be returned back to the user for this app. 
+
+
+
+
+pipenv shell
+pipenv install
+python 
+import app
+app.create_all()
+exit()
